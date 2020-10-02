@@ -1,0 +1,64 @@
+tcpredate(1)                     User Commands                    tcpredate(1)
+
+NAME
+       tcpredate - Adjust the times of packets in pcap files
+
+SYNOPSIS
+       tcpredate  [-f  factor]  [-s starttime] [-n] [-g gap] [-o output] pcap1
+       pcap2 ...
+
+DESCRIPTION
+       Tcpredate is a tool to change the  recorded  times  and/or  spacing  of
+       packets  stored  in  files  in pcap(3) format, such as those created by
+       tools such as tcpdump(1) and wireshark(1).  Tcpredate will  also  merge
+       multiple  pcap  files with possibly disparate packet times so that they
+       appear consecutive.  Once a pcap file has had its packet times  rewrit‐
+       ten, it can be replayed back out on the network using tcpreplay(1).
+
+       Tcpredate  does not change the headers or contents of the packets them‐
+       selves; use tcprewrite(1) for that.
+
+OPTIONS
+       -f factor
+              Increase (factor > 1.0) or decrease (factor <  1.0)  the  timing
+              between  packets  by the given factor, a double-precision float‐
+              ing-point number.  Thus, for example, -f .25 will  decrease  the
+              time between packets by a factor of four, and hence increase the
+              apparent packet rate fourfold.
+
+       -s starttime
+              Change the start time of the first packet to  the  given  value,
+              then  adjust  all the following ones accordingly.  The starttime
+              argument is interpreted by getdate(3).
+
+       -n     Change the start time of the first packet to  the  current  time
+              (now), as given by gettimeofday(3)
+
+       -g gap When  merging  multiple  pcap files, adjust the timings so there
+              are gap microseconds (default 1) between the last packet of  one
+              file and the first packet of the next.
+
+       -o output
+              Write the output to output instead of the default stdout.
+
+EXIT STATUS
+       One of the following exit values will be returned:
+
+       0 (EXIT_SUCCESS)
+              Successful program execution.
+
+       1 (EXIT_FAILURE)
+              One  of  the arguments was invalid, or the source or destination
+              files could not be opened.
+
+AUTHOR
+       Mark Carson, NIST
+
+COPYRIGHT
+       No copyright is asserted.  As a U.S. Government publication, this  code
+       is in the public domain.
+
+BUGS
+       Please send bug reports to: antd-admin@nist.gov
+
+tcpredate                         01 Jun 2018                     tcpredate(1)

@@ -1,0 +1,62 @@
+.TH tcpredate "1" "01 Jun 2018" "tcpredate" "User Commands"
+.\"
+.SH NAME
+tcpredate \- Adjust the times of packets in pcap files
+.SH SYNOPSIS
+.B tcpredate
+[\fI-f factor\fR] [\fI-s starttime\fR] [\fI-n\fR] [\fI-g gap\fR] [\fI-o output\fR]
+\fIpcap1 pcap2 ...\fR
+.SH "DESCRIPTION"
+Tcpredate is a tool to change the recorded times and/or spacing of packets
+stored in files in \fIpcap(3)\fP format,
+such as those created by tools such as \fItcpdump(1)\fP and \fIwireshark(1)\fP.
+Tcpredate will also merge multiple pcap files with possibly disparate
+packet times so that they appear consecutive.
+Once a pcap file has had its packet times rewritten, it can be replayed back
+out on the network using \fItcpreplay(1)\fP.
+.sp
+Tcpredate does not change the headers or contents of the packets themselves;
+use \fItcprewrite(1)\fP for that.
+.SH "OPTIONS"
+.TP
+\fI-f factor\fR
+Increase (\fIfactor\fR > 1.0) or decrease (\fIfactor\fR < 1.0)
+the timing between packets by the given \fIfactor\fR,
+a double-precision floating-point number.
+Thus, for example, \fI-f .25\fR will decrease the time between packets
+by a factor of four, and hence increase the apparent packet rate fourfold.
+.TP
+\fI-s starttime\fR
+Change the start time of the first packet to the given value, then adjust
+all the following ones accordingly.
+The \fIstarttime\fR argument is interpreted by \fBgetdate(3)\fR.
+.TP
+\fI-n\fR
+Change the start time of the first packet to the current time (now),
+as given by \fBgettimeofday(3)\R.
+.TP
+\fI-g gap\fR
+When merging multiple pcap files, adjust the timings so there are \fIgap\fR
+microseconds (default 1) between the last packet of one file and the first
+packet of the next.
+.TP
+\fI-o output\fR
+Write the output to \fIoutput\fR instead of the default stdout.
+
+.SH "EXIT STATUS"
+One of the following exit values will be returned:
+.TP
+0 (EXIT_SUCCESS)
+Successful program execution.
+.TP
+1 (EXIT_FAILURE)
+One of the arguments was invalid, or the source or destination files
+could not be opened.
+.PP
+.SH "AUTHOR"
+Mark Carson, NIST
+.SH "COPYRIGHT"
+No copyright is asserted.
+As a U.S. Government publication, this code is in the public domain.
+.SH "BUGS"
+Please send bug reports to: antd-admin@nist.gov
